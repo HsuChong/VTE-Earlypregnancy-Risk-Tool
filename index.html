@@ -1,15 +1,14 @@
 ---
 skip rendering: true
 ---
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Pregnancy VTE Risk Calculator</title>
- 
- <!-- Google Translate Script -->
+    
+    <!-- Google Translate Script -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
@@ -18,10 +17,8 @@ skip rendering: true
                 autoDisplay: false
             }, 'google_translate_element');
         }
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-<style>
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,6 +27,7 @@ skip rendering: true
             max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; 
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            padding-bottom: 100px; /* space for bottom nav */
         }
         .header { 
             text-align: center; padding: 30px 0; 
@@ -41,6 +39,16 @@ skip rendering: true
             background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .header p { color: #666; font-size: 1.2em; }
+
+        .disclaimer {
+            margin: 10px 0 20px;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.95em;
+        }
         
         .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
         
@@ -85,8 +93,10 @@ skip rendering: true
             font-size: 1.8em; margin: 20px 0; font-weight: 600; color: #2c3e50;
         }
         #gpText { 
-            font-size: 1.3em; color: #495057; max-width: 700px; margin: 25px auto 0; 
+            font-size: 1.0em; color: #495057; max-width: 700px; margin: 25px auto 0; 
             line-height: 1.7; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 12px;
+            white-space: pre-wrap;
+            text-align: left;
         }
         
         /* LOW RISK POPUP */
@@ -117,6 +127,40 @@ skip rendering: true
         }
         .feedback-btn { background: #667eea; }
         .close-btn:hover, .feedback-btn:hover { transform: scale(1.05); }
+
+        /* BOTTOM ACTION BAR */
+        .bottom-nav {
+            position: fixed; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(20px);
+            padding: 12px 20px; 
+            border-radius: 50px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: flex; 
+            gap: 10px; 
+            z-index: 999;
+        }
+        .bottom-nav button {
+            width: 50px; 
+            height: 50px; 
+            border: none; 
+            border-radius: 50%; 
+            font-size: 20px; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        .nhs-btn { background: linear-gradient(45deg, #00a651, #007a3d); color: white; }
+        .nhs-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,166,81,0.4); }
+        .email-btn { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
+        .email-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
+        .feedback-btn-round { background: linear-gradient(45deg, #6c757d, #495057); color: white; }
+        .feedback-btn-round:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(108,117,125,0.4); }
         
         @media (max-width: 600px) {
             .question { flex-direction: column; align-items: flex-start; }
@@ -128,21 +172,18 @@ skip rendering: true
 <body>
     <div class="header">
         <h1>🏥 Early Pregnancy VTE Risk Calculator</h1>
+        <div id="google_translate_element" style="margin-top:10px;"></div>
         <p>NHS Maternal Care Bundle - Element 1</p>
     </div>
 
-     <div class="disclaimer">
-            <strong>Important Medical Disclaimer:</strong> This tool provides general information only and is not a substitute 
-            for professional medical advice, diagnosis, or treatment. Always seek the advice of your GP or midwife. 
-            In an emergency (chest pain, breathlessness), call 999 immediately.
+    <div class="disclaimer">
+        <strong>Important medical disclaimer:</strong> This tool provides general information only and is not a substitute 
+        for professional medical advice, diagnosis, or treatment. Always seek the advice of your GP or midwife. 
+        In an emergency (chest pain, breathlessness), call 999 immediately.
     </div>
     
-    <div class="content">
-
-                </div>
-                <h2>Understanding Your Risk</h2>
-                <p>Some women with morning sickness may have higher risk of blood clots (VTE). Answer 3 simple questions to check if you need to speak to your GP.</p>
-            </div>
+    <h2>Understanding your risk</h2>
+    <p>Some women with morning sickness may have higher risk of blood clots (VTE). Answer 3 simple questions to check if you need to speak to your GP.</p>
     
     <div class="container">
         <div class="questions-section">
@@ -161,7 +202,7 @@ skip rendering: true
                 </select>
             </div>
             <div class="question">
-                <label>3. BMI ≥ 50 kg/m² OR weight >18 stone OR > 118kg?</label>
+                <label>3. BMI ≥ 50 kg/m² OR weight >18 stone OR >118 kg?</label>
                 <select id="q3">
                     <option value="0">No</option>
                     <option value="1">Yes</option>
@@ -170,8 +211,8 @@ skip rendering: true
         </div>
         
         <div class="buttons">
-            <button class="calculate-btn" onclick="calculateRisk()">Calculate Risk</button>
-            <button class="gp-copy-btn" onclick="copyGPText()">📋 Copy GP Text</button>
+            <button class="calculate-btn" onclick="calculateRisk()">Calculate risk</button>
+            <button class="gp-copy-btn" onclick="copyGPText()">📋 Copy GP text</button>
         </div>
         
         <!-- RISK RESULT -->
@@ -199,56 +240,67 @@ skip rendering: true
             <p>Help improve this VTE tool:</p>
             <textarea id="feedbackText" placeholder="What worked well? Any suggestions? (optional)"></textarea>
             <div style="margin-top: 20px;">
-                <button class="feedback-btn" onclick="submitFeedback()">Send Feedback</button>
+                <button class="feedback-btn" onclick="submitFeedback()">Send feedback</button>
                 <button class="close-btn" onclick="closeFeedback()">Close</button>
             </div>
         </div>
     </div>
 
+    <!-- BOTTOM ACTION BAR -->
+    <div class="bottom-nav">
+        <button class="nhs-btn" onclick="launchNHSApp()" title="NHS App">🏥</button>
+        <button class="email-btn" onclick="emailGP()" title="Email GP">✉️</button>
+        <button class="feedback-btn-round" onclick="openFeedback()" title="Feedback">💬</button>
+    </div>
+
     <script>
-function calculateRisk() {
-    const q1 = parseInt(document.getElementById('q1').value) || 0;
-    const q2 = parseInt(document.getElementById('q2').value) || 0; 
-    const q3 = parseInt(document.getElementById('q3').value) || 0;
-    const total = q1 + q2 + q3;
-    
-    console.log('DEBUG - Total:', total);
-    
-    document.getElementById('gpText').style.display = 'none';
-    document.getElementById('result').style.display = 'none';
-    
-    if (total >= 1) {
-        document.getElementById('riskScore').textContent = 'HIGH';
-        document.getElementById('riskScore').style.color = '#dc3545';
-        document.getElementById('riskText').textContent = '🏥 HIGH VTE RISK - LMWH prophylaxis required';
-        document.getElementById('gpText').textContent = "Subject: URGENT Pregnancy VTE Risk Assessment - Maternal Care Bundle
+        function calculateRisk() {
+            const q1 = parseInt(document.getElementById('q1').value) || 0;
+            const q2 = parseInt(document.getElementById('q2').value) || 0; 
+            const q3 = parseInt(document.getElementById('q3').value) || 0;
+            const total = q1 + q2 + q3;
+            
+            console.log('DEBUG - Total:', total);
+            
+            document.getElementById('gpText').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            
+            if (total >= 1) {
+                document.getElementById('riskScore').textContent = 'HIGH';
+                document.getElementById('riskScore').style.color = '#dc3545';
+                document.getElementById('riskText').textContent = '🏥 HIGH VTE RISK - LMWH prophylaxis may be required—discuss urgently with GP.';
+                
+                const gpTemplate =
+`Subject: URGENT Pregnancy VTE Risk Assessment - Maternal Care Bundle
 
 Dear GP Team,
 
 I completed the NHS Maternal Care Bundle VTE screening and scored HIGH RISK:
 • Previous confirmed VTE: [Your answer]
-• Hyperemesis gravidarum (dehydration/immobility): [Your answer]  
+• Hyperemesis gravidarum (dehydration/immobility): [Your answer]
 • BMI >50: [Your answer]
 
 Please review urgently for thromboprophylaxis within 72 hours.
 
 Name: [Your name]
 DOB: [Your DOB]
-Contact: [Your number]
-</textarea>";
-        document.getElementById('gpText').style.display = 'block';
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-    } else {
-        document.getElementById('lowRiskPopup').classList.add('show');
-    }
-}
-function copyGPText() {
-    const gpText = document.getElementById('gpText').innerText || "No GP text available";
-    navigator.clipboard.writeText(gpText).then(() => {
-            alert('✅ GP text copied to clipboard!');
-    }).catch(() => {
-            prompt('Copy this text:', gpText);
+Contact: [Your number]`;
+
+                document.getElementById('gpText').textContent = gpTemplate;
+                document.getElementById('gpText').style.display = 'block';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                document.getElementById('lowRiskPopup').classList.add('show');
+            }
+        }
+
+        function copyGPText() {
+            const gpText = document.getElementById('gpText').innerText || "No GP text available";
+            navigator.clipboard.writeText(gpText).then(() => {
+                alert('✅ GP text copied to clipboard!');
+            }).catch(() => {
+                prompt('Copy this text:', gpText);
             });
         }
         
@@ -263,56 +315,25 @@ function copyGPText() {
         function submitFeedback() {
             const feedback = document.getElementById('feedbackText').value;
             console.log('Feedback:', feedback);
-            alert('Thank you for your feedback! 🎉');
+            alert('Thank you for your feedback!');
             document.getElementById('feedbackText').value = '';
             document.getElementById('feedbackPopup').classList.remove('show');
         }
 
-/* BOTTOM ACTION BAR */
-.bottom-nav {
-    position: fixed; 
-    bottom: 20px; 
-    left: 50%; 
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.95); 
-    backdrop-filter: blur(20px);
-    padding: 12px 20px; 
-    border-radius: 50px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-    display: flex; 
-    gap: 10px; 
-    z-index: 999;
-}
+        function launchNHSApp() {
+            window.open('https://www.nhs.uk/nhs-app/', '_blank');
+        }
 
-.bottom-nav button {
-    width: 50px; 
-    height: 50px; 
-    border: none; 
-    border-radius: 50%; 
-    font-size: 20px; 
-    cursor: pointer; 
-    transition: all 0.3s ease;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-}
+        function emailGP() {
+            const subject = "URGENT Pregnancy VTE Risk Assessment - Maternal Care Bundle";
+            const body = document.getElementById('gpText').innerText || "VTE assessment completed.";
+            const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailto;
+        }
 
-.nhs-btn { background: linear-gradient(45deg, #00a651, #007a3d); color: white; }
-.nhs-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,166,81,0.4); }
-
-.email-btn { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
-.email-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
-
-.feedback-btn { background: linear-gradient(45deg, #6c757d, #495057); color: white; }
-.feedback-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(108,117,125,0.4); }
-
-        <!-- BOTTOM ACTION BAR -->
-<div class="bottom-nav">
-    <button class="nhs-btn" onclick="launchNHSApp()" title="NHS App">🏥</button>
-    <button class="email-btn" onclick="emailGP()" title="Email GP">✉️</button>
-    <button class="feedback-btn" onclick="openFeedback()" title="Feedback">💬</button>
-</div>
-
+        function openFeedback() {
+            document.getElementById('feedbackPopup').classList.add('show');
+        }
     </script>
 </body>
 </html>
