@@ -7,11 +7,7 @@ skip rendering: true
 <head>
     <title>VTE Early Pregnancy Risk Tool</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -44,215 +40,103 @@ skip rendering: true
         .header h1 { font-size: 28px; margin-bottom: 10px; }
         .header p { opacity: 0.9; font-size: 16px; }
         
-        .question {
-            margin-bottom: 25px;
-        }
-        
+        .question { margin-bottom: 25px; }
         .question label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 18px;
-            color: #333;
+            display: block; font-weight: 600; margin-bottom: 10px;
+            font-size: 18px; color: #333;
         }
-        
         .question select {
-            width: 100%;
-            padding: 15px;
-            font-size: 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            width: 100%; padding: 15px; font-size: 16px;
+            border: 2px solid #e1e5e9; border-radius: 10px;
             background: #f8f9fa;
         }
-        
         .question select:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
+            outline: none; border-color: #667eea; background: white;
         }
         
         .buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;
         }
         
         button {
-            flex: 1;
-            padding: 18px 25px;
-            font-size: 18px;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 60px;
+            flex: 1; padding: 18px 25px; font-size: 18px; font-weight: 600;
+            border: none; border-radius: 12px; cursor: pointer;
+            transition: all 0.3s ease; min-height: 60px;
         }
         
-        .calculate-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .calculate-btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .calculate-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); }
+        .gp-copy-btn { background: #28a745; color: white; }
+        .gp-copy-btn:hover { background: #218838; transform: translateY(-2px); }
+        .recalculate-btn { 
+            background: #ffc107; color: #333; font-weight: 700;
+            border: 2px solid #e0a800;
+        }
+        .recalculate-btn:hover { 
+            background: #e0a800; transform: translateY(-2px); 
         }
         
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-        
-        .gp-copy-btn {
-            background: #28a745;
-            color: white;
-        }
-        
-        .gp-copy-btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-        
-        /* FIXED: Beautiful, readable GP text */
         .gp-text {
-            background: #f8f9ff !important;
-            border: 2px solid #e3e8ff !important;
-            border-radius: 12px !important;
-            padding: 25px !important;
+            background: #f8f9ff !important; border: 2px solid #e3e8ff !important;
+            border-radius: 12px !important; padding: 25px !important;
             margin-top: 20px !important;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
-            font-size: 16px !important;
-            line-height: 1.7 !important;
-            color: #1a202c !important;
-            font-weight: 500 !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            font-size: 16px !important; line-height: 1.7 !important;
+            color: #1a202c !important; font-weight: 500 !important;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
-            position: relative;
-            z-index: 20;
         }
         
-        .gp-text:hover {
-            border-color: #667eea;
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
-            transform: translateY(-1px);
-        }
-        
-        /* MODAL OVERLAYS - Fixed z-index */
         .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+            z-index: 1000; justify-content: center; align-items: center;
         }
-        
         .overlay.show { display: flex; }
         
         .popup, .feedback-popup {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            transform: scale(0);
-            animation: popupGrow 0.4s ease forwards;
-            position: relative;
-            z-index: 1001;
+            background: white; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center;
+            max-width: 500px; width: 90%; transform: scale(0);
+            animation: popupGrow 0.4s ease forwards; position: relative; z-index: 1001;
         }
-        
         @keyframes popupGrow { to { transform: scale(1); } }
         
-        /* LOW RISK POPUP */
         .popup h2 { font-size: 48px; font-weight: bold; margin-bottom: 20px; }
         .risk-low .popup h2 { color: #28a745; text-shadow: 0 0 20px rgba(40, 167, 69, 0.3); }
         .popup p { font-size: 28px; color: #333; margin-bottom: 30px; line-height: 1.4; }
         
-        /* FEEDBACK POPUP */
-        .feedback-popup h3 { font-size: 28px; color: #333; margin-bottom: 20px; }
-        .feedback-popup textarea {
-            width: 100%;
-            height: 120px;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 16px;
-            resize: vertical;
-            margin-bottom: 20px;
-        }
-        .feedback-popup textarea:focus { border-color: #667eea; outline: none; }
-        
         .close-btn, .feedback-btn {
-            background: #28a745;
-            color: white;
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            background: #28a745; color: white; padding: 15px 30px;
+            font-size: 18px; border: none; border-radius: 10px;
+            cursor: pointer; transition: all 0.3s ease; font-family: inherit;
             margin: 0 10px;
         }
-        
-        .close-btn:hover, .feedback-btn:hover {
-            background: #218838;
-            transform: scale(1.05);
-        }
-        
+        .close-btn:hover, .feedback-btn:hover { background: #218838; transform: scale(1.05); }
         .feedback-btn { background: #667eea; }
         .feedback-btn:hover { background: #5a67d8; }
         
-        /* NEW FEEDBACK & TRAFFIC SECTION */
         .footer-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #e1e5e9;
+            margin-top: 40px; padding-top: 30px; border-top: 1px solid #e1e5e9;
             text-align: center;
         }
-        
         .utility-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+            display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;
             margin-bottom: 20px;
         }
-        
         .utility-btn {
-            background: #f8f9fa;
-            color: #495057;
-            border: 2px solid #e1e5e9;
-            padding: 12px 20px;
-            font-size: 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            background: #f8f9fa; color: #495057; border: 2px solid #e1e5e9;
+            padding: 12px 20px; font-size: 14px; border-radius: 8px;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
         }
-        
         .utility-btn:hover {
-            background: #e9ecef;
-            border-color: #667eea;
-            color: #667eea;
+            background: #e9ecef; border-color: #667eea; color: #667eea;
             transform: translateY(-1px);
         }
-        
         .traffic-counter {
-            background: #f0f8ff;
-            border: 1px solid #e3e8ff;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #1a202c;
+            background: #f0f8ff; border: 1px solid #e3e8ff; padding: 15px;
+            border-radius: 10px; font-size: 14px; color: #1a202c;
         }
-        
         .result { display: none !important; }
         .footer { text-align: center; margin-top: 20px; color: #666; font-size: 14px; }
     </style>
@@ -261,22 +145,23 @@ skip rendering: true
     <div class="container">
         <div class="header">
             <h1>🩸 VTE Early Pregnancy Risk Tool</h1>
-            <p>NHS E Maternal Care Bundle | v1.0 | 20/01/2026</p>
+            <p> v1.0 | 20/01/2026</p>
         </div>
         
-        <div class="question">
-            <label>1. Previous VTE (DVT/PE)?</label>
-            <select id="q1"><option value="0">No</option><option value="3">Yes</option></select>
-        </div>
-        
-        <div class="question">
-            <label>2. Current thrombophilia?</label>
-            <select id="q2"><option value="0">No</option><option value="3">Yes</option></select>
-        </div>
-        
-        <div class="question">
-            <label>3. BMI ≥ 40 kg/m²?</label>
-            <select id="q3"><option value="0">No</option><option value="2">Yes</option></select>
+        <!-- ALWAYS VISIBLE FORM -->
+        <div class="questions-section">
+            <div class="question">
+                <label>1. Have ever had a blood clot in your leg or lungs (doctors call this DVT or PE)?</label>
+                <select id="q1"><option value="0">No</option><option value="3">Yes</option></select>
+            </div>
+            <div class="question">
+                <label>2. Are you so ill from vomiting that you can't stand up and OR can't drink without vomiting?</label>
+                <select id="q2"><option value="0">No</option><option value="3">Yes</option></select>
+            </div>
+            <div class="question">
+                <label>3. BMI ≥ 50 kg/m² OR weight >18 stone OR > 118kg?</label>
+                <select id="q3"><option value="0">No</option><option value="2">Yes</option></select>
+            </div>
         </div>
         
         <div class="buttons">
@@ -288,9 +173,12 @@ skip rendering: true
             <div class="risk-score" id="riskScore">-</div>
             <div id="riskText"></div>
             <div id="gpText" class="gp-text" style="display: none;"></div>
+            <!-- RECALCULATE BUTTON NOW VISIBLE -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="recalculate-btn" onclick="resetForm()">🔄 Recalculate New Patient</button>
+            </div>
         </div>
         
-        <!-- NEW: Fixed utility buttons + feedback -->
         <div class="footer-section">
             <div class="utility-buttons">
                 <button class="utility-btn" onclick="openNHSGuide()">📱 Open NHS App Guide</button>
@@ -298,11 +186,9 @@ skip rendering: true
                 <button class="utility-btn" onclick="emailTemplate()">📝 Email Template</button>
                 <button class="utility-btn" onclick="showFeedback()">💬 Give Feedback</button>
             </div>
-            
             <div class="traffic-counter">
                 👀 <span id="visitorCount">1</span> clinicians used this tool today
             </div>
-            
             <div class="footer">
                 Based on NHS E Maternal Care Bundle 06/01/2026 | 
                 <a href="https://github.com/HsuChong/VTE-Earlypregnancy-Risk-Tool" target="_blank">⭐ GitHub</a>
@@ -310,21 +196,19 @@ skip rendering: true
         </div>
     </div>
 
-    <!-- LOW RISK POPUP -->
+    <!-- POPUPS (unchanged) -->
     <div id="lowRiskPopup" class="overlay risk-low">
         <div class="popup">
             <h2>✅ LOW RISK</h2>
-            <p>No pharmacological VTE prophylaxis required<br><strong>per NHS E Maternal Care Bundle</strong></p>
+            <p>No pharmacological VTE prophylaxis required<br><strong>Your midwife will recheck your risk at the booking appointment (usually <10+6 weeks)</strong></p>
             <button class="close-btn" onclick="closePopup()">Continue</button>
         </div>
     </div>
-
-    <!-- FEEDBACK POPUP -->
     <div id="feedbackPopup" class="overlay">
         <div class="feedback-popup">
             <h3>💬 Quick Feedback</h3>
             <p>Help improve this VTE tool:</p>
-            <textarea id="feedbackText" placeholder="What worked well? Any suggestions? (optional)"></textarea>
+            <textarea id="feedbackText" placeholder="What worked well? Any suggestions?"></textarea>
             <br>
             <button class="feedback-btn" onclick="submitFeedback()">Send Feedback</button>
             <button class="close-btn" onclick="closeFeedback()">Close</button>
@@ -344,16 +228,10 @@ skip rendering: true
             
             document.getElementById('gpText').style.display = 'none';
             
-            if (total >= 3) {
+            if (total >= 1) {
                 showInlineResult('HIGH', '🏥 HIGH VTE RISK - LMWH prophylaxis required', '#dc3545', 
-                    'GP: Early pregnancy patient scores HIGH VTE risk (≥3 points). Recommend LMWH prophylaxis per NHS E Maternal Care Bundle.');
-            } else if (total === 2) {
-                showInlineResult('MEDIUM', '⚠️ MEDIUM VTE RISK - Clinical review required', '#ffc107',
-                    'GP: Early pregnancy patient scores MEDIUM VTE risk (2 points). Clinical review recommended per NHS E Maternal Care Bundle.');
-            } else {
-                document.getElementById('lowRiskPopup').classList.add('show');
-            }
-        }
+                    'GP: At risk of VTE. Consider LMWH if no contraindications (eg bleeding/ suspected ectopic pregnancy');
+                  }
         
         function showInlineResult(level, text, color, gpNote) {
             const result = document.getElementById('result');
@@ -370,6 +248,15 @@ skip rendering: true
             result.scrollIntoView({ behavior: 'smooth' });
         }
         
+        // NEW: RESET FORM FUNCTION
+        function resetForm() {
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('q1').value = '0';
+            document.getElementById('q2').value = '0';
+            document.getElementById('q3').value = '0';
+            document.getElementById('questions-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
         function closePopup() { document.getElementById('lowRiskPopup').classList.remove('show'); }
         function closeFeedback() { document.getElementById('feedbackPopup').classList.remove('show'); }
         
@@ -378,47 +265,26 @@ skip rendering: true
             navigator.clipboard.writeText(gpText).then(() => alert('✅ GP text copied!'));
         }
         
-        // NEW UTILITY FUNCTIONS
-        function openNHSGuide() {
-            window.open('https://www.nhs.uk/nhs-app/nhs-app-help-and-support/', '_blank');
-        }
-        
-        function emailGP() {
-            window.location.href = 'mailto:?subject=VTE Assessment&body=VTE assessment completed...';
-        }
-        
+        function openNHSGuide() { window.open('https://www.nhs.uk/nhs-app/nhs-app-help-and-support/', '_blank'); }
+        function emailGP() { window.location.href = 'mailto:?subject=VTE Assessment&body=VTE assessment completed...'; }
         function emailTemplate() {
-            const template = `VTE Early Pregnancy Risk Assessment
-Date: ${new Date().toLocaleDateString()}
-Score: [Enter score]
-Action: [Enter action required]
-
-Please review per NHS E Maternal Care Bundle guidelines.`;
+            const template = `VTE Early Pregnancy Risk Assessment\nDate: ${new Date().toLocaleDateString()}\nScore: [Enter score]\nAction: [Enter action required]\n\nPlease review per NHS E Maternal Care Bundle guidelines.`;
             navigator.clipboard.writeText(template).then(() => alert('📝 Email template copied!'));
         }
-        
-        function showFeedback() {
-            document.getElementById('feedbackPopup').classList.add('show');
-        }
-        
+        function showFeedback() { document.getElementById('feedbackPopup').classList.add('show'); }
         function submitFeedback() {
             const feedback = document.getElementById('feedbackText').value;
-            if (feedback.trim()) {
-                // Store feedback locally (GitHub Issues integration later)
-                console.log('Feedback:', feedback);
-                alert('🙏 Thank you! Your feedback helps improve this tool.');
-            }
+            if (feedback.trim()) { console.log('Feedback:', feedback); }
+            alert('🙏 Thank you! Your feedback helps improve this tool.');
             closeFeedback();
         }
         
-        // Close popups on overlay click
         document.querySelectorAll('.overlay').forEach(overlay => {
             overlay.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('show');
-                }
+                if (e.target === this) this.classList.remove('show');
             });
         });
     </script>
 </body>
 </html>
+   
