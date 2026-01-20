@@ -252,87 +252,66 @@ skip rendering: true
         <button class="email-btn" onclick="emailGP()" title="Email GP">✉️</button>
         <button class="feedback-btn-round" onclick="openFeedback()" title="Feedback">💬</button>
     </div>
+<script>
+function calculateRisk() {
+    const q1 = Number(document.getElementById('q1').value || 0);
+    const q2 = Number(document.getElementById('q2').value || 0);
+    const q3 = Number(document.getElementById('q3').value || 0);
 
-    <script>
-    function calculateRisk() {
-        const q1 = Number(document.getElementById('q1').value);
-        const q2 = Number(document.getElementById('q2').value);
-        const q3 = Number(document.getElementById('q3').value);
+    const total = q1 + q2 + q3;
 
-        const total = q1 + q2 + q3;
+    // Reset UI
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('lowRiskPopup').classList.remove('show');
 
-        // Reset UI
-        document.getElementById('result').style.display = 'none';
-        document.getElementById('gpText').style.display = 'none';
-        document.getElementById('lowRiskPopup').classList.remove('show');
+    if (total >= 1) {
+        document.getElementById('riskScore').textContent = 'HIGH';
+        document.getElementById('riskText').textContent =
+            '🏥 HIGH CHANCE OF VTE – LMWH prophylaxis may be required. Please contact your GP urgently.';
 
-        if (total >= 1) {
-            document.getElementById('riskScore').textContent = 'HIGH';
-            document.getElementById('riskText').textContent =
-                '🏥 HIGH CHANCE OF VTE - LMWH prophylaxis may be required. Please contact your GP urgently.';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
 
-            const gpTemplate = `Subject: URGENT Pregnancy VTE Risk Assessment - Maternal Care Bundle
-
-Dear GP Team,
-
-I completed the NHS Maternal Care Bundle VTE screening and scored HIGH RISK.
-
-Could I have an appointment to discuss this please?.
-
-Name:
-DOB:
-Contact:
-`;
-
-            document.getElementById('gpText').textContent = gpTemplate;
-            document.getElementById('gpText').style.display = 'block';
-            document.getElementById('result').style.display = 'block';
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-
-        } else {
-            // LOW RISK → popup
-            document.getElementById('lowRiskPopup').classList.add('show');
-        }
+    } else {
+        document.getElementById('lowRiskPopup').classList.add('show');
     }
+}
 
-    function closeLowRisk() {
-        document.getElementById('lowRiskPopup').classList.remove('show');
-    }
+function closeLowRisk() {
+    document.getElementById('lowRiskPopup').classList.remove('show');
+}
 
-    function copyGPText() {
-        const text = document.getElementById('gpText').innerText.trim();
-        if (!text) {
-            alert('No GP text to copy yet.');
-            return;
-        }
-        navigator.clipboard.writeText(text).then(() => {
-            alert('✅ GP text copied to clipboard');
-        });
-    }
+function launchNHSApp() {
+    window.open('https://www.nhs.uk/nhs-app/', '_blank');
+}
 
-    function launchNHSApp() {
-        window.open('https://www.nhs.uk/nhs-app/', '_blank');
-    }
+function getTodayDate() {
+    return new Date().toLocaleDateString('en-GB');
+}
 
-   <script>
 function emailGP() {
     const q1Val = document.getElementById('q1').value === "1" ? "Yes" : "No";
     const q2Val = document.getElementById('q2').value === "1" ? "Yes" : "No";
     const q3Val = document.getElementById('q3').value === "1" ? "Yes" : "No";
 
-    const total = 
-        Number(document.getElementById('q1').value) +
-        Number(document.getElementById('q2').value) +
-        Number(document.getElementById('q3').value);
+    const gestation = document.getElementById('gestation')?.value || "Not specified";
+
+    const total =
+        Number(document.getElementById('q1').value || 0) +
+        Number(document.getElementById('q2').value || 0) +
+        Number(document.getElementById('q3').value || 0);
 
     const riskLevel = total >= 1 ? "HIGH RISK" : "LOW RISK";
+    const today = getTodayDate();
 
     const subject = "Pregnancy VTE Risk Assessment – Maternal Care Bundle";
 
     const body = `Dear GP Team,
 
-I have completed an early pregnancy VTE risk self-assessment using an NHS-aligned tool.
+I completed an early pregnancy VTE risk self-assessment using an NHS-aligned tool.
 
+Date completed: ${today}
+Gestation: ${gestation}
 Risk outcome: ${riskLevel}
 
 Answers provided:
@@ -349,11 +328,10 @@ Contact number:
 Kind regards
 `;
 
-    const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+    window.location.href =
+        `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 </script>
-
 
 </body>
 </html>
