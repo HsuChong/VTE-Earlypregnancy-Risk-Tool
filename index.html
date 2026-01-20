@@ -1,335 +1,315 @@
----
-skip rendering: true
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Pregnancy VTE Risk Calculator</title>
-    
-    <!-- Google Translate Script -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
+
+    <!-- Google Translate (hidden, controlled by buttons) -->
+    <script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+            { pageLanguage: 'en', autoDisplay: false },
+            'google_translate_element'
+        );
+    }
+
+    function setLanguage(lang) {
+        const select = document.querySelector('select.goog-te-combo');
+        if (!select) return;
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+    }
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; 
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding-bottom: 100px; /* space for bottom nav */
+            padding-bottom: 100px;
         }
-        .header { 
-            text-align: center; padding: 30px 0; 
-            background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+
+        .header {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
-        .header h1 { 
-            color: #2c3e50; font-size: 2.5em; margin-bottom: 10px;
-            background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+
+        .header h1 {
+            font-size: 2.3em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .header p { color: #666; font-size: 1.2em; }
+
+        .language-selector {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .language-selector button {
+            margin: 5px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+        }
 
         .disclaimer {
-            margin: 10px 0 20px;
             background: #fff3cd;
             border: 1px solid #ffeeba;
             color: #856404;
             padding: 12px 15px;
             border-radius: 10px;
+            margin: 20px 0;
             font-size: 0.95em;
         }
-        
-        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
-        
-        .questions-section { margin: 30px 0; }
-        .question { 
-            display: flex; align-items: center; margin-bottom: 25px; padding: 20px; 
-            background: #f8f9fa; border-radius: 15px; border-left: 5px solid #667eea;
-        }
-        .question label { 
-            flex: 1; font-size: 1.1em; font-weight: 500; color: #2c3e50; margin-right: 20px;
-        }
-        .question select { 
-            padding: 12px 20px; font-size: 16px; border: 2px solid #e1e5e9; 
-            border-radius: 10px; background: white; min-width: 120px; cursor: pointer;
-        }
-        .question select:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        
-        .buttons { text-align: center; margin: 40px 0; }
-        .calculate-btn, .gp-copy-btn {
-            padding: 18px 40px; font-size: 18px; border: none; border-radius: 12px; 
-            cursor: pointer; font-weight: 600; transition: all 0.3s ease; margin: 0 10px;
-            min-height: 55px;
-        }
-        .calculate-btn { 
-            background: linear-gradient(45deg, #667eea, #764ba2); color: white; 
-        }
-        .calculate-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102,126,234,0.4); }
-        .gp-copy-btn { 
-            background: linear-gradient(45deg, #28a745, #20c997); color: white;
-        }
-        .gp-copy-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(40,167,69,0.4); }
-        
-        #result { 
-            display: none; margin: 40px 0; padding: 40px; border-radius: 20px; text-align: center;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 3px solid #e9ecef;
-        }
-        #riskScore { 
-            font-size: 5em; font-weight: 800; margin: 0; text-transform: uppercase;
-            background: linear-gradient(45deg, #dc3545, #ff6b6b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        #riskText { 
-            font-size: 1.8em; margin: 20px 0; font-weight: 600; color: #2c3e50;
-        }
-        #gpText { 
-            font-size: 1.0em; color: #495057; max-width: 700px; margin: 25px auto 0; 
-            line-height: 1.7; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 12px;
-            white-space: pre-wrap;
-            text-align: left;
-        }
-        
-        /* LOW RISK POPUP */
-        .overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.7); z-index: 1000; 
-        }
-        .overlay.show { display: flex; align-items: center; justify-content: center; }
-        .low-risk-popup, .feedback-popup {
-            background: white; padding: 40px; border-radius: 20px; max-width: 500px; width: 90%; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; max-height: 90vh; overflow-y: auto;
-        }
-        .low-risk-popup h3 { color: #28a745; font-size: 2.2em; margin-bottom: 20px; }
-        .low-risk-popup p { font-size: 1.2em; color: #666; margin-bottom: 30px; }
-        
-        /* FEEDBACK POPUP */
-        .feedback-popup textarea {
-            width: 100%; height: 200px; padding: 15px; border: 2px solid #e1e5e9; 
-            border-radius: 10px; font-family: inherit; font-size: 16px; resize: vertical;
-            margin-bottom: 20px;
-        }
-        .feedback-popup textarea:focus { border-color: #667eea; outline: none; }
-        .feedback-popup h3 { font-size: 24px; color: #333; margin-bottom: 15px; }
-        .close-btn, .feedback-btn {
-            background: #28a745; color: white; padding: 10px 20px; font-size: 14px;
-            border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease;
-            font-family: inherit; margin: 0 8px; min-height: 40px;
-        }
-        .feedback-btn { background: #667eea; }
-        .close-btn:hover, .feedback-btn:hover { transform: scale(1.05); }
 
-        /* BOTTOM ACTION BAR */
-        .bottom-nav {
-            position: fixed; 
-            bottom: 20px; 
-            left: 50%; 
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.95); 
-            backdrop-filter: blur(20px);
-            padding: 12px 20px; 
-            border-radius: 50px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            display: flex; 
-            gap: 10px; 
-            z-index: 999;
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
-        .bottom-nav button {
-            width: 50px; 
-            height: 50px; 
-            border: none; 
-            border-radius: 50%; 
-            font-size: 20px; 
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            display: flex; 
-            align-items: center; 
+
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #e1e5e9;
+            width: 100%;
+        }
+
+        .buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .calculate-btn {
+            padding: 16px 30px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+        }
+
+        #result {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 20px;
+            background: #f8f9fa;
+            text-align: center;
+        }
+
+        #riskScore {
+            font-size: 4em;
+            font-weight: 800;
+        }
+
+        /* Overlays */
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
             justify-content: center;
         }
-        .nhs-btn { background: linear-gradient(45deg, #00a651, #007a3d); color: white; }
-        .nhs-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,166,81,0.4); }
-        .email-btn { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
-        .email-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
-        .feedback-btn-round { background: linear-gradient(45deg, #6c757d, #495057); color: white; }
-        .feedback-btn-round:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(108,117,125,0.4); }
-        
-        @media (max-width: 600px) {
-            .question { flex-direction: column; align-items: flex-start; }
-            .question label { margin-bottom: 10px; margin-right: 0; }
-            .buttons button { display: block; width: 100%; margin: 10px 0; }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .popup {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .bottom-nav button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
         }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <h1>🏥 Early Pregnancy VTE Risk Calculator</h1>
-        <div id="google_translate_element" style="margin-top:10px;"></div>
-        <p>NHS Maternal Care Bundle - Element 1</p>
+
+<!-- Required hidden Google element -->
+<div id="google_translate_element" style="display:none;"></div>
+
+<div class="header">
+    <h1>🏥 Early Pregnancy VTE Risk Calculator</h1>
+
+    <div class="language-selector">
+        <p><strong>Change language:</strong></p>
+        <button onclick="setLanguage('es')">Español</button>
+        <button onclick="setLanguage('ar')">العربية</button>
+        <button onclick="setLanguage('ur')">اردو</button>
+        <button onclick="setLanguage('pl')">Polski</button>
+        <button onclick="setLanguage('zh-CN')">中文</button>
+        <button onclick="setLanguage('fr')">Français</button>
+    </div>
+</div>
+
+<div class="disclaimer">
+    This tool provides general information only and does not replace medical advice.
+    If you have chest pain or breathlessness, call 999 immediately.
+</div>
+
+<div class="container">
+    <div class="question">
+        <label>1. Previous DVT or PE?</label>
+        <select id="q1"><option value="0">No</option><option value="1">Yes</option></select>
+    </div>
+    <div class="question">
+        <label>2. Severe vomiting preventing drinking or standing?</label>
+        <select id="q2"><option value="0">No</option><option value="1">Yes</option></select>
+    </div>
+    <div class="question">
+        <label>3. BMI ≥ 50 or weight &gt;118 kg?</label>
+        <select id="q3"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
 
-    <div class="disclaimer">
-        <strong>Important medical disclaimer:</strong> This tool provides general information only and is not a substitute 
-        for professional medical advice, diagnosis, or treatment. Always seek the advice of your GP or midwife. 
-        In an emergency (chest pain, breathlessness), call 999 immediately.
-    </div>
-    
-    <h2>Understanding your risk</h2>
-    <p>Some women with morning sickness may have higher risk of blood clots (VTE). Answer 3 simple questions to check if you need to speak to your GP.</p>
-    
-    <div class="container">
-        <div class="questions-section">
-            <div class="question">
-                <label>1. Have you ever had a blood clot in your leg or lungs (doctors call this DVT or PE)?</label>
-                <select id="q1">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </div>
-            <div class="question">
-                <label>2. Are you so ill from vomiting that you can't stand up OR can't drink without vomiting?</label>
-                <select id="q2">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </div>
-            <div class="question">
-                <label>3. BMI ≥ 50 kg/m² OR weight >18 stone OR >118 kg?</label>
-                <select id="q3">
-                    <option value="0">No</option>
-                    <option value="1">Yes</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="buttons">
-            <button class="calculate-btn" onclick="calculateRisk()">Calculate risk</button>
-            <button class="gp-copy-btn" onclick="copyGPText()">📋 Copy GP text</button>
-        </div>
-        
-        <!-- RISK RESULT -->
-        <div id="result">
-            <h2 id="riskScore">LOW</h2>
-            <p id="riskText"></p>
-            <p id="gpText"></p>
-        </div>
-    </div>
-    
-    <!-- LOW RISK POPUP -->
-    <div id="lowRiskPopup" class="overlay">
-        <div class="low-risk-popup">
-            <h3>✅ LOW VTE RISK</h3>
-            <p>No pharmacological VTE prophylaxis required at this stage.<br>
-            Continue standard early pregnancy care.</p>
-            <button class="calculate-btn" onclick="closeLowRisk()" style="padding: 15px 30px; font-size: 16px;">OK</button>
-        </div>
-    </div>
-    
-    <!-- FEEDBACK POPUP -->
-    <div id="feedbackPopup" class="overlay">
-        <div class="feedback-popup">
-            <h3>💬 Quick Feedback</h3>
-            <p>Help improve this VTE tool:</p>
-            <textarea id="feedbackText" placeholder="What worked well? Any suggestions? (optional)"></textarea>
-            <div style="margin-top: 20px;">
-                <button class="feedback-btn" onclick="submitFeedback()">Send feedback</button>
-                <button class="close-btn" onclick="closeFeedback()">Close</button>
-            </div>
-        </div>
+    <div class="buttons">
+        <button class="calculate-btn" onclick="calculateRisk()">Calculate risk</button>
     </div>
 
-    <!-- BOTTOM ACTION BAR -->
-    <div class="bottom-nav">
-        <button class="nhs-btn" onclick="launchNHSApp()" title="NHS App">🏥</button>
-        <button class="email-btn" onclick="emailGP()" title="Email GP">✉️</button>
-        <button class="feedback-btn-round" onclick="openFeedback()" title="Feedback">💬</button>
+    <div id="result">
+        <h2 id="riskScore"></h2>
+        <p id="riskText"></p>
     </div>
+</div>
+
+<!-- LOW RISK -->
+<div id="lowRiskPopup" class="overlay">
+    <div class="popup">
+        <h3>✅ Low VTE risk</h3>
+        <p>No blood thinning medication is required at this stage.</p>
+        <button onclick="closeLowRisk()">OK</button>
+    </div>
+</div>
+
+<!-- FEEDBACK -->
+<div id="feedbackPopup" class="overlay">
+    <div class="popup">
+        <h3>💬 Feedback</h3>
+        <textarea id="feedbackText"></textarea>
+        <br><br>
+        <button onclick="submitFeedback()">Send</button>
+        <button onclick="closeFeedback()">Close</button>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <button onclick="launchNHSApp()">🏥</button>
+    <button onclick="emailGP()">✉️</button>
+    <button onclick="openFeedback()">💬</button>
+</div>
+
 <script>
 function calculateRisk() {
-    const q1 = Number(document.getElementById('q1').value || 0);
-    const q2 = Number(document.getElementById('q2').value || 0);
-    const q3 = Number(document.getElementById('q3').value || 0);
+    const total =
+        Number(q1.value) +
+        Number(q2.value) +
+        Number(q3.value);
 
-    const total = q1 + q2 + q3;
-
-    // Reset UI
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('lowRiskPopup').classList.remove('show');
+    result.style.display = 'block';
 
     if (total >= 1) {
-        document.getElementById('riskScore').textContent = 'HIGH';
-        document.getElementById('riskText').textContent =
-            '🏥 HIGH CHANCE OF VTE – LMWH prophylaxis may be required. Please contact your GP urgently.';
-
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-
+        riskScore.textContent = 'HIGH';
+        riskText.textContent = 'High chance of VTE. Please contact your GP urgently.';
     } else {
-        document.getElementById('lowRiskPopup').classList.add('show');
+        result.style.display = 'none';
+        lowRiskPopup.classList.add('show');
     }
 }
 
 function closeLowRisk() {
-    document.getElementById('lowRiskPopup').classList.remove('show');
+    lowRiskPopup.classList.remove('show');
 }
 
 function launchNHSApp() {
     window.open('https://www.nhs.uk/nhs-app/', '_blank');
 }
 
-function getTodayDate() {
-    return new Date().toLocaleDateString('en-GB');
+function emailGP() {
+    window.location.href =
+        'mailto:?subject=Pregnancy VTE Risk Assessment';
 }
 
-function emailGP() {
-    const q1Val = document.getElementById('q1').value === "1" ? "Yes" : "No";
-    const q2Val = document.getElementById('q2').value === "1" ? "Yes" : "No";
-    const q3Val = document.getElementById('q3').value === "1" ? "Yes" : "No";
+function openFeedback() {
+    feedbackPopup.classList.add('show');
+}
 
-    const gestation = document.getElementById('gestation')?.value || "Not specified";
+function closeFeedback() {
+    feedbackPopup.classList.remove('show');
+}
 
-    const total =
-        Number(document.getElementById('q1').value || 0) +
-        Number(document.getElementById('q2').value || 0) +
-        Number(document.getElementById('q3').value || 0);
-
-    const riskLevel = total >= 1 ? "HIGH RISK" : "LOW RISK";
-    const today = getTodayDate();
-
-    const subject = "Pregnancy VTE Risk Assessment – Maternal Care Bundle";
-
-    const body = `Dear GP Team,
-
-I completed an early pregnancy VTE risk self-assessment using an NHS-aligned tool.
-
-Date completed: ${today}
-Gestation: ${gestation}
-Risk outcome: ${riskLevel}
-
-Answers provided:
-1. Previous DVT or PE: ${q1Val}
-2. Severe vomiting with inability to drink or stand: ${q2Val}
-3. BMI ≥50 kg/m² or weight >118 kg: ${q3Val}
-
-If appropriate, please advise whether further assessment or thromboprophylaxis is required.
-
-Name:
-Date of birth:
-Contact number:
-
-Kind regards
-`;
-
+function submitFeedback() {
+    if (!feedbackText.value.trim()) return;
     window.location.href =
-        `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        `mailto:?subject=VTE tool feedback&body=${encodeURIComponent(feedbackText.value)}`;
+    feedbackText.value = '';
+    closeFeedback();
 }
 </script>
 
