@@ -174,7 +174,7 @@ skip rendering: true
     <div id="riskText"></div>
     <div id="gpText" class="gp-text" style="display: none;"></div>
     <div style="text-align: center; margin-top: 20px;">
-        <button class="recalculate-btn" onclick="resetForm()" style="background: #ffc107; color: #333; font-weight: 700; border: 2px solid #e0a800; padding: 12px 24px; border-radius: 8px; cursor: pointer;">🔄 Recalculate New Patient</button>
+        <button onclick="resetForm()" style="background: #ffc107; color: #333; font-weight: 700; border: 2px solid #e0a800; padding: 12px 24px; border-radius: 8px; cursor: pointer;">🔄 Recalculate New Patient</button>
     </div>
 </div>
 
@@ -228,16 +228,14 @@ function calculateRisk() {
     
     document.getElementById('gpText').style.display = 'none';
     
-    if (total >= 3) {
+    if (total >= 1) {
         showInlineResult('HIGH', '🏥 HIGH VTE RISK - LMWH prophylaxis required', '#dc3545', 
-            'GP: Early pregnancy patient scores HIGH VTE risk (≥3 points). Recommend LMWH prophylaxis per NHS E Maternal Care Bundle.');
-    } else if (total === 2) {
-        showInlineResult('MEDIUM', '⚠️ MEDIUM VTE RISK - Clinical review required', '#ffc107',
-            'GP: Early pregnancy patient scores MEDIUM VTE risk (2 points). Clinical review recommended per NHS E Maternal Care Bundle.');
+            'GP: Recommend LMWH prophylaxis if there are no contraindications such as bleeding or suspected ectopic pregnancy');
     } else {
         document.getElementById('lowRiskPopup').classList.add('show');
     }
 }
+
 
 function showInlineResult(level, text, color, gpNote) {
     const result = document.getElementById('result');
