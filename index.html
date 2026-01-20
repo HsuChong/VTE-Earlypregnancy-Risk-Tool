@@ -212,13 +212,13 @@
 </div>
 
 <div class="disclaimer">
-    DISCLAIMER: This tool provides general information only and does not replace medical advice.
+    DISCLAIMER: This tool provides general information only for women less than 10 weeks pregnant and does not replace medical advice.
     If you have chest pain or breathlessness, call 999 immediately.
 </div>
 
 <div class="container">
     <div class="question">
-        <label>1. Have you ever had a blood clot in your leg or your lung (VTE)?</label>
+        <label>1. Have you ever had a blood clot in your leg or your lung (VTE) confirmed by a scan?</label>
         <select id="q1"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
     <div class="question">
@@ -229,13 +229,17 @@
         <label>3. Is your BMI ≥ 50 OR your weight ≥ 18 stone OR ≥ 118 kg?</label>
         <select id="q3"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
+     <div class="question">
+        <label>4. Do you have "Anti-thrombin" deficiency? </label>
+        <select id="q3"><option value="0">No</option><option value="1">Yes</option></select>
+    </div>
 
     <div class="buttons">
         <button class="calculate-btn" onclick="calculateRisk()">Calculate risk</button>
     </div>
 
     <div id="result">
-        <h2 id="riskScore"></h2>
+        <h3 id="riskScore"></h3>
         <p id="riskText"></p>
     </div>
 </div>
@@ -244,7 +248,8 @@
 <div id="lowRiskPopup" class="overlay">
     <div class="popup">
         <h3>✅ Low VTE risk</h3>
-        <p>No blood thinning medication is required at this stage.</p>
+        <p>No blood thinning medication is required at this stage. You may have other risk factors. 
+            Your doctor or midwife will discuss this with you at your booking appointment.</p>
         <button onclick="closeLowRisk()">OK</button>
     </div>
 </div>
@@ -261,9 +266,9 @@
 </div>
 
 <div class="bottom-nav">
-    <button onclick="launchNHSApp()">🏥</button>
-    <button onclick="emailGP()">✉️</button>
-    <button onclick="openFeedback()">💬</button>
+    <button class="nhs-btn" onclick="launchNHSSelfReferral()" title="Opens NHS Self-Referral Portal">🏥</button>
+    <button class="email-btn" onclick="emailGP()" title="Phone your GP about this risk assessment">✉️</button>
+    <button class="feedback-btn-round" onclick="openFeedback()" title="Send feedback to improve tool">💬</button>
 </div>
 
 <script>
@@ -271,8 +276,9 @@ function calculateRisk() {
     const q1 = Number(document.getElementById('q1').value);
     const q2 = Number(document.getElementById('q2').value);
     const q3 = Number(document.getElementById('q3').value);
+    const q4 = Number(document.getElementById('q4').value);
 
-    const total = q1 + q2 + q3;
+    const total = q1 + q2 + q3 + q4;
 
     const result = document.getElementById('result');
     const riskScore = document.getElementById('riskScore');
@@ -285,10 +291,9 @@ function calculateRisk() {
 
     if (total >= 1) {
         riskScore.textContent =
-            'You may have a higher chance of a blood clot';
+            'You have a higher chance of a blood clot (VTE)';
         riskText.textContent =
-            'Please contact your GP as soon as possible to discuss whether blood thinning medication is required.';
-
+            'Please contact your GP as soon as possible to discuss whether blood thinning medication is required. If you are already on blood thinners do not stop them until you have discussed this with your doctor';
         result.style.display = 'block';
         result.scrollIntoView({ behavior: 'smooth' });
 
@@ -302,7 +307,7 @@ function closeLowRisk() {
 }
 
 function launchNHSApp() {
-    window.open('https://www.nhs.uk/nhs-app/', '_blank');
+    window.open('https://www.nhs.uk/nhs-services/refer-yourself-for-nhs-pregnancy-care/', '_blank');
 }
 
 function emailGP() {
