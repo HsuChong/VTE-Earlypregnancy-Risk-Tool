@@ -201,6 +201,7 @@
 
     <div class="language-selector">
         <p><strong>Change language:</strong></p>
+        <button onclick="setLanguage('en')">English</button>
         <button onclick="setLanguage('es')">Español</button>
         <button onclick="setLanguage('ar')">العربية</button>
         <button onclick="setLanguage('ur')">اردو</button>
@@ -211,26 +212,26 @@
 </div>
 
 <div class="disclaimer">
-    This tool provides general information only and does not replace medical advice.
+    DISCLAIMER: This tool provides general information only and does not replace medical advice.
     If you have chest pain or breathlessness, call 999 immediately.
 </div>
 
 <div class="container">
     <div class="question">
-        <label>1. Previous DVT or PE?</label>
+        <label>1. Have you ever had a blood clot in your leg or lung</label>
         <select id="q1"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
     <div class="question">
-        <label>2. Severe vomiting preventing drinking or standing?</label>
+        <label>2. Is your morning sickness so bad that you can't get up, or that you can't drink?</label>
         <select id="q2"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
     <div class="question">
-        <label>3. BMI ≥ 50 or weight &gt;118 kg?</label>
+        <label>3. Is your BMI ≥ 50 OR your weight ≥ 18 stone OR ≥ 118 kg?</label>
         <select id="q3"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
 
     <div class="buttons">
-        <button class="calculate-btn" onclick="calculateRisk()">Calculate</button>
+        <button class="calculate-btn" onclick="calculate()">Calculate risk</button>
     </div>
 
     <div id="result">
