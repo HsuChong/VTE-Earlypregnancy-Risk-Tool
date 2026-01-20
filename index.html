@@ -169,15 +169,15 @@ skip rendering: true
             <button class="gp-copy-btn" onclick="copyGPText()">📋 Copy GP Text</button>
         </div>
         
-        <div id="result" class="result">
-            <div class="risk-score" id="riskScore">-</div>
-            <div id="riskText"></div>
-            <div id="gpText" class="gp-text" style="display: none;"></div>
-            <!-- RECALCULATE BUTTON NOW VISIBLE -->
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="recalculate-btn" onclick="resetForm()">🔄 Recalculate New Patient</button>
-            </div>
-        </div>
+<div id="result" class="result">
+    <div class="risk-score" id="riskScore">-</div>
+    <div id="riskText"></div>
+    <div id="gpText" class="gp-text" style="display: none;"></div>
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="recalculate-btn" onclick="resetForm()" style="background: #ffc107; color: #333; font-weight: 700; border: 2px solid #e0a800; padding: 12px 24px; border-radius: 8px; cursor: pointer;">🔄 Recalculate New Patient</button>
+    </div>
+</div>
+
         
         <div class="footer-section">
             <div class="utility-buttons">
@@ -216,74 +216,81 @@ skip rendering: true
     </div>
 
     <script>
-        let visitorCount = localStorage.getItem('visitorCount') ? parseInt(localStorage.getItem('visitorCount')) : 1;
+       let visitorCount = localStorage.getItem('visitorCount') ? parseInt(localStorage.getItem('visitorCount')) : 1;
         document.getElementById('visitorCount').textContent = visitorCount;
         localStorage.setItem('visitorCount', visitorCount + 1);
 
-        function calculateRisk() {
-            const q1 = parseInt(document.getElementById('q1').value);
-            const q2 = parseInt(document.getElementById('q2').value);
-            const q3 = parseInt(document.getElementById('q3').value);
-            const total = q1 + q2 + q3;
-            
-            document.getElementById('gpText').style.display = 'none';
-            
-            if (total >= 1) {
-                showInlineResult('HIGH', '🏥 HIGH VTE RISK - LMWH prophylaxis required', '#dc3545', 
-                    'GP: At risk of VTE. Consider LMWH if no contraindications (eg bleeding/ suspected ectopic pregnancy');
-                  }
-        
-        function showInlineResult(level, text, color, gpNote) {
-            const result = document.getElementById('result');
-            const riskScore = document.getElementById('riskScore');
-            const riskText = document.getElementById('riskText');
-            const gpText = document.getElementById('gpText');
-            
-            riskScore.textContent = level;
-            riskScore.style.color = color;
-            riskText.textContent = text;
-            gpText.textContent = gpNote;
-            gpText.style.display = 'block';
-            result.style.display = 'block';
-            result.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // NEW: RESET FORM FUNCTION
-        function resetForm() {
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('q1').value = '0';
-            document.getElementById('q2').value = '0';
-            document.getElementById('q3').value = '0';
-            document.getElementById('questions-section').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function closePopup() { document.getElementById('lowRiskPopup').classList.remove('show'); }
-        function closeFeedback() { document.getElementById('feedbackPopup').classList.remove('show'); }
-        
-        function copyGPText() {
-            const gpText = document.getElementById('gpText').textContent || 'VTE assessment completed - no action required';
-            navigator.clipboard.writeText(gpText).then(() => alert('✅ GP text copied!'));
-        }
-        
-        function openNHSGuide() { window.open('https://www.nhs.uk/nhs-app/nhs-app-help-and-support/', '_blank'); }
-        function emailGP() { window.location.href = 'mailto:?subject=VTE Assessment&body=VTE assessment completed...'; }
-        function emailTemplate() {
-            const template = `VTE Early Pregnancy Risk Assessment\nDate: ${new Date().toLocaleDateString()}\nScore: [Enter score]\nAction: [Enter action required]\n\nPlease review per NHS E Maternal Care Bundle guidelines.`;
-            navigator.clipboard.writeText(template).then(() => alert('📝 Email template copied!'));
-        }
-        function showFeedback() { document.getElementById('feedbackPopup').classList.add('show'); }
-        function submitFeedback() {
-            const feedback = document.getElementById('feedbackText').value;
-            if (feedback.trim()) { console.log('Feedback:', feedback); }
-            alert('🙏 Thank you! Your feedback helps improve this tool.');
-            closeFeedback();
-        }
-        
-        document.querySelectorAll('.overlay').forEach(overlay => {
-            overlay.addEventListener('click', function(e) {
-                if (e.target === this) this.classList.remove('show');
-            });
-        });
+function calculateRisk() {
+    const q1 = parseInt(document.getElementById('q1').value || 0);
+    const q2 = parseInt(document.getElementById('q2').value || 0);
+    const q3 = parseInt(document.getElementById('q3').value || 0);
+    const total = q1 + q2 + q3;
+    
+    document.getElementById('gpText').style.display = 'none';
+    
+    if (total >= 3) {
+        showInlineResult('HIGH', '🏥 HIGH VTE RISK - LMWH prophylaxis required', '#dc3545', 
+            'GP: Early pregnancy patient scores HIGH VTE risk (≥3 points). Recommend LMWH prophylaxis per NHS E Maternal Care Bundle.');
+    } else if (total === 2) {
+        showInlineResult('MEDIUM', '⚠️ MEDIUM VTE RISK - Clinical review required', '#ffc107',
+            'GP: Early pregnancy patient scores MEDIUM VTE risk (2 points). Clinical review recommended per NHS E Maternal Care Bundle.');
+    } else {
+        document.getElementById('lowRiskPopup').classList.add('show');
+    }
+}
+
+function showInlineResult(level, text, color, gpNote) {
+    const result = document.getElementById('result');
+    const riskScore = document.getElementById('riskScore');
+    const riskText = document.getElementById('riskText');
+    const gpText = document.getElementById('gpText');
+    
+    riskScore.textContent = level;
+    riskScore.style.color = color;
+    riskText.textContent = text;
+    gpText.textContent = gpNote;
+    gpText.style.display = 'block';
+    result.style.display = 'block';
+    result.scrollIntoView({ behavior: 'smooth' });
+}
+
+// NEW RECALCULATE FUNCTION
+function resetForm() {
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('q1').value = '0';
+    document.getElementById('q2').value = '0';
+    document.getElementById('q3').value = '0';
+}
+
+function closePopup() { document.getElementById('lowRiskPopup').classList.remove('show'); }
+function closeFeedback() { document.getElementById('feedbackPopup').classList.remove('show'); }
+
+function copyGPText() {
+    const gpText = document.getElementById('gpText').textContent || 'VTE assessment completed - no action required';
+    navigator.clipboard.writeText(gpText).then(() => alert('✅ GP text copied!'));
+}
+
+function openNHSGuide() { window.open('https://www.nhs.uk/nhs-app/nhs-app-help-and-support/', '_blank'); }
+function emailGP() { window.location.href = 'mailto:?subject=VTE Assessment&body=VTE assessment completed...'; }
+function emailTemplate() {
+    const template = `VTE Early Pregnancy Risk Assessment\nDate: ${new Date().toLocaleDateString()}\nScore: [Enter score]\nAction: [Enter action required]\n\nPlease review per NHS E Maternal Care Bundle guidelines.`;
+    navigator.clipboard.writeText(template).then(() => alert('📝 Email template copied!'));
+}
+function showFeedback() { document.getElementById('feedbackPopup').classList.add('show'); }
+function submitFeedback() {
+    const feedback = document.getElementById('feedbackText').value;
+    if (feedback.trim()) console.log('Feedback:', feedback);
+    alert('🙏 Thank you! Your feedback helps improve this tool.');
+    closeFeedback();
+}
+
+document.querySelectorAll('.overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('show');
+    });
+});
+</script>
+
     </script>
 </body>
 </html>
