@@ -8,6 +8,19 @@ skip rendering: true
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Pregnancy VTE Risk Calculator</title>
+
+    <title>Early Pregnancy VTE Risk Calculator</title>
+
+<!-- Google Translate -->
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<style>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -115,6 +128,26 @@ skip rendering: true
         <h1>🏥 Early Pregnancy VTE Risk Calculator</h1>
         <p>NHS Maternal Care Bundle - Element 1</p>
     </div>
+
+     <div class="disclaimer">
+            <strong>Important Medical Disclaimer:</strong> This tool provides general information only and is not a substitute 
+            for professional medical advice, diagnosis, or treatment. Always seek the advice of your GP or midwife. 
+            In an emergency (chest pain, breathlessness), call 999 immediately.
+    </div>
+    
+    <div class="content">
+        <!-- Section 1: Welcome -->
+        <div id="section1" class="section active">
+        <div class="progress-bar">
+        <div class="progress-step active">1</div>
+        <div class="progress-step">2</div>
+        <div class="progress-step">3</div>
+        <div class="progress-step">✓</div>
+                </div>
+                <h2>Understanding Your Risk</h2>
+                <p>Some women with morning sickness may have higher risk of blood clots (VTE). Answer 3 simple questions to check if you need to speak to your GP.</p>
+                <button class="btn" onclick="nextSection(2)">Start VTE Assessment</button>
+            </div>
     
     <div class="container">
         <div class="questions-section">
@@ -225,6 +258,52 @@ function copyGPText() {
             document.getElementById('feedbackText').value = '';
             document.getElementById('feedbackPopup').classList.remove('show');
         }
+
+/* BOTTOM ACTION BAR */
+.bottom-nav {
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.95); 
+    backdrop-filter: blur(20px);
+    padding: 12px 20px; 
+    border-radius: 50px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    display: flex; 
+    gap: 10px; 
+    z-index: 999;
+}
+
+.bottom-nav button {
+    width: 50px; 
+    height: 50px; 
+    border: none; 
+    border-radius: 50%; 
+    font-size: 20px; 
+    cursor: pointer; 
+    transition: all 0.3s ease;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.nhs-btn { background: linear-gradient(45deg, #00a651, #007a3d); color: white; }
+.nhs-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,166,81,0.4); }
+
+.email-btn { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
+.email-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(0,123,255,0.4); }
+
+.feedback-btn { background: linear-gradient(45deg, #6c757d, #495057); color: white; }
+.feedback-btn:hover { transform: scale(1.1); box-shadow: 0 5px 20px rgba(108,117,125,0.4); }
+
+        <!-- BOTTOM ACTION BAR -->
+<div class="bottom-nav">
+    <button class="nhs-btn" onclick="launchNHSApp()" title="NHS App">🏥</button>
+    <button class="email-btn" onclick="emailGP()" title="Email GP">✉️</button>
+    <button class="feedback-btn" onclick="openFeedback()" title="Feedback">💬</button>
+</div>
+
     </script>
 </body>
 </html>
