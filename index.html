@@ -8,14 +8,16 @@ skip rendering: true
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Early Pregnancy VTE Risk Calculator</title>
-
-    <title>Early Pregnancy VTE Risk Calculator</title>
-
-<!-- Google Translate -->
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-}
+ 
+ <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
 </script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
@@ -136,17 +138,10 @@ function googleTranslateElementInit() {
     </div>
     
     <div class="content">
-        <!-- Section 1: Welcome -->
-        <div id="section1" class="section active">
-        <div class="progress-bar">
-        <div class="progress-step active">1</div>
-        <div class="progress-step">2</div>
-        <div class="progress-step">3</div>
-        <div class="progress-step">✓</div>
+
                 </div>
                 <h2>Understanding Your Risk</h2>
                 <p>Some women with morning sickness may have higher risk of blood clots (VTE). Answer 3 simple questions to check if you need to speak to your GP.</p>
-                <button class="btn" onclick="nextSection(2)">Start VTE Assessment</button>
             </div>
     
     <div class="container">
@@ -226,7 +221,21 @@ function calculateRisk() {
         document.getElementById('riskScore').textContent = 'HIGH';
         document.getElementById('riskScore').style.color = '#dc3545';
         document.getElementById('riskText').textContent = '🏥 HIGH VTE RISK - LMWH prophylaxis required';
-        document.getElementById('gpText').textContent = "GP: Recommend LMWH prophylaxis if there are no contraindications such as bleeding or suspected ectopic pregnancy";
+        document.getElementById('gpText').textContent = "Subject: URGENT Pregnancy VTE Risk Assessment - Maternal Care Bundle
+
+Dear GP Team,
+
+I completed the NHS Maternal Care Bundle VTE screening and scored HIGH RISK:
+• Previous confirmed VTE: [Your answer]
+• Hyperemesis gravidarum (dehydration/immobility): [Your answer]  
+• BMI >50: [Your answer]
+
+Please review urgently for thromboprophylaxis within 72 hours.
+
+Name: [Your name]
+DOB: [Your DOB]
+Contact: [Your number]
+</textarea>";
         document.getElementById('gpText').style.display = 'block';
         document.getElementById('result').style.display = 'block';
         document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
