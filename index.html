@@ -79,7 +79,7 @@
 
         .container {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
@@ -230,7 +230,7 @@
     </div>
 
     <div class="buttons">
-        <button class="calculate-btn" onclick="calculateRisk()">Calculate risk</button>
+        <button class="calculate-btn" onclick="calculateRisk()">Calculate</button>
     </div>
 
     <div id="result">
@@ -275,8 +275,8 @@ function calculateRisk() {
     result.style.display = 'block';
 
     if (total >= 1) {
-        riskScore.textContent = 'HIGH';
-        riskText.textContent = 'High chance of VTE. Please contact your GP urgently.';
+        riskScore.textContent = 'Based on your answers you may have a higher chance of blood clots in your leg or lung';
+        riskText.textContent = 'Please contact your GP as soon as possible to discuss if you need blood thinning medication.';
     } else {
         result.style.display = 'none';
         lowRiskPopup.classList.add('show');
