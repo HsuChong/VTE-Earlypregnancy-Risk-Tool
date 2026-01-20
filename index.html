@@ -234,10 +234,11 @@
         <select id="q4"><option value="0">No</option><option value="1">Yes</option></select>
     </div>
 
-    <div class="buttons">
-        <button class="calculate-btn" onclick="calculateRisk()">Calculate risk</button>
-    </div>
+<button type="button" class="calculate-btn" onclick="calculateRisk()">
+    Calculate risk
+</button>
 
+</div>
     <div id="result">
         <h3 id="riskScore"></h3>
         <p id="riskText"></p>
@@ -250,7 +251,8 @@
         <h3>✅ Low VTE risk</h3>
         <p>No blood thinning medication is required at this stage. You may have other risk factors. 
             Your doctor or midwife will discuss this with you at your booking appointment.</p>
-        <button onclick="closeLowRisk()">OK</button>
+        <button type="button" onclick="closeLowRisk()">OK</button>
+
     </div>
 </div>
 
@@ -260,8 +262,8 @@
         <h3>💬 Feedback</h3>
         <textarea id="feedbackText"></textarea>
         <br><br>
-        <button onclick="submitFeedback()">Send</button>
-        <button onclick="closeFeedback()">Close</button>
+        <button type="button" onclick="submitFeedback()">Send</button>
+        <button type="button" onclick="closeFeedback()">Close</button>
     </div>
 </div>
 
