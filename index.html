@@ -268,26 +268,37 @@
 
 <script>
 function calculateRisk() {
-    const q1 = Number(document.getElementById('q1').value || 0);
-    const q2 = Number(document.getElementById('q2').value || 0);
-    const q3 = Number(document.getElementById('q3').value || 0);
+    const q1 = Number(document.getElementById('q1').value);
+    const q2 = Number(document.getElementById('q2').value);
+    const q3 = Number(document.getElementById('q3').value);
 
     const total = q1 + q2 + q3;
 
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('lowRiskPopup').classList.remove('show');
+    const result = document.getElementById('result');
+    const riskScore = document.getElementById('riskScore');
+    const riskText = document.getElementById('riskText');
+    const lowRiskPopup = document.getElementById('lowRiskPopup');
+
+    // reset UI
+    result.style.display = 'none';
+    lowRiskPopup.classList.remove('show');
 
     if (total >= 1) {
-        riskScore.textContent = 'Based on your answers you may have a higher chance of blood clots in your leg or lung';
-        riskText.textContent = 'Please contact your GP as soon as possible to discuss if you need blood thinning medication.';
+        riskScore.textContent =
+            'You may have a higher chance of a blood clot';
+        riskText.textContent =
+            'Please contact your GP as soon as possible to discuss whether blood thinning medication is required.';
+
+        result.style.display = 'block';
+        result.scrollIntoView({ behavior: 'smooth' });
+
     } else {
-        result.style.display = 'none';
         lowRiskPopup.classList.add('show');
     }
 }
 
 function closeLowRisk() {
-    lowRiskPopup.classList.remove('show');
+    document.getElementById('lowRiskPopup').classList.remove('show');
 }
 
 function launchNHSApp() {
@@ -296,22 +307,25 @@ function launchNHSApp() {
 
 function emailGP() {
     window.location.href =
-        'mailto:?subject=Pregnancy VTE Risk Assessment';
+        'mailto:?subject=Pregnancy VTE assessment';
 }
 
 function openFeedback() {
-    feedbackPopup.classList.add('show');
+    document.getElementById('feedbackPopup').classList.add('show');
 }
 
 function closeFeedback() {
-    feedbackPopup.classList.remove('show');
+    document.getElementById('feedbackPopup').classList.remove('show');
 }
 
 function submitFeedback() {
-    if (!feedbackText.value.trim()) return;
+    const text = document.getElementById('feedbackText').value.trim();
+    if (!text) return;
+
     window.location.href =
-        `mailto:?subject=VTE tool feedback&body=${encodeURIComponent(feedbackText.value)}`;
-    feedbackText.value = '';
+        `mailto:?subject=VTE tool feedback&body=${encodeURIComponent(text)}`;
+
+    document.getElementById('feedbackText').value = '';
     closeFeedback();
 }
 </script>
